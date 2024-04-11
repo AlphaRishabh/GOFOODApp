@@ -35,9 +35,9 @@ export default function Login() {
       <div>
         <Navbar />
       </div>
-      <div className="container" style={{ marginTop:"10px",opacity:"0.8", marginRight: "790px", width: "120vh", height: "89vh", backgroundImage: 'url("https://w.forfun.com/fetch/df/df264a9f328aca05e8f79ec059122daa.jpeg")', backgroundSize: "100%", border: "inset 4px" }}>
+      <div className="container" style={{ marginTop:"10px",opacity:"0.8", marginRight: "870px", width: "122vh", height: "90vh", backgroundImage: 'url("https://w.forfun.com/fetch/df/df264a9f328aca05e8f79ec059122daa.jpeg")', backgroundSize: "100%", border: "inset 4px" }}>
       </div>
-      <div className='container' style={{width: "40%", marginLeft: "122vh", paddingLeft: "220px", marginTop: "-89vh", paddingTop: "20vh", backgroundImage: "url('https://wallpaper.dog/large/17155514.jpg')", height: "89vh", border: "inset 4px" }}>
+      <div className='container' style={{width: "41%", marginLeft: "122vh", paddingLeft: "220px", marginTop: "-90vh", paddingTop: "20vh", backgroundImage: "url('https://wallpaper.dog/large/17155514.jpg')", height: "90vh", border: "inset 4px" }}>
         <form onSubmit={handleSubmit}>
           <div className="m-3" style={{ width: "40vh" }}>
             <label htmlFor="exampleInputEmail1" className="form-label text-light">Email address</label>
@@ -49,7 +49,7 @@ export default function Login() {
             <input type="password" className="form-control" value={credentials.password} onChange={onChange} name='password' />
           </div>
           <button type="submit" className="m-3 btn btn-success">Submit</button>
-          <Link to="/" className="m-3 mx-1 btn btn-danger">New User</Link>
+          <Link to="/signup" className="m-3 mx-1 btn btn-danger">New User</Link>
         </form>
       </div>
     </>

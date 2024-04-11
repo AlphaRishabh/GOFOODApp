@@ -65,13 +65,15 @@ export default function Signup() {
   }
 
   return (
-    <div style={{ backgroundImage: 'url("https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")', backgroundSize: 'cover',height: '100vh' }}>
+    <div >
       <div>
       <Navbar />
       </div>
+      <div className="container" style={{ marginTop:"10px",opacity:"0.8", marginRight: "870px", width: "122vh", height: "90vh", backgroundImage: 'url("https://w.forfun.com/fetch/df/df264a9f328aca05e8f79ec059122daa.jpeg")', backgroundSize: "100%", border: "inset 4px" }}>
+      </div>
 
-        <div className='container' >
-          <form className='w-50 m-auto mt-5 border bg-dark border-success rounded' onSubmit={handleSubmit}>
+        <div className='container' style={{width: "41%", marginLeft: "122vh", paddingLeft: "220px", marginTop: "-90vh", paddingTop: "20vh", backgroundImage: "url('https://wallpaper.dog/large/17155514.jpg')", height: "90vh", border: "inset 4px" }}>
+          <form className='mt-1' style={{paddingRight:"12vh"}}onSubmit={handleSubmit}>
             <div className="m-3">
               <label htmlFor="name" className="form-label">Name</label>
               <input type="text" className="form-control" name='name' value={credentials.name} onChange={onChange} aria-describedby="emailHelp" />

@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+/* eslint-disable react/jsx-no-undef */
 
-export default function Navbar() {
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import Badge from "@material-ui/core/Badge";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import { useCart } from './ContextReducer';
+import Modal from '../Modal';
+import Cart from '../screens/Cart';
+
+export default function Navbar(props) {
     const [userName, setUserName] = useState('');
+    const [cartView, setCartView] = useState(false);
+    const items = useCart();
     const navigate = useNavigate();
 
     useEffect(() => {
         const user = localStorage.getItem('userEmail');
         if (user) {
-            const capitalizedUserName = user.charAt(0).toUpperCase() + user.slice(1);
-            setUserName(capitalizedUserName.split('@gmail.com'));
+            // Extracting only the name part
+            const name = user.split('@')[0];
+            setUserName(name);
         }
     }, []);
 
@@ -17,6 +27,10 @@ export default function Navbar() {
         localStorage.removeItem('token');
         localStorage.removeItem('userEmail');
         navigate("/login");
+    };
+
+    const loadCart = () => {
+        setCartView(true);
     };
 
     return (
@@ -31,17 +45,22 @@ export default function Navbar() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link className="nav-link fs-5 mx-3" aria-current="page" to="/">Home</Link>
+                                <Link className="nav-link fs-5 mx-3 active" aria-current="page" to="/">Home</Link>
                             </li>
-                            {userName && (
+                            {(localStorage.getItem("token")) &&
                                 <li className="nav-item">
-                                    <Link className="nav-link fs-5 mx-3" aria-current="page" to="/myorder">My Orders</Link>
-                                </li>
-                            )}
+                                    <Link className="nav-link fs-5 mx-3 active" aria-current="page" to="/myorder">My Orders</Link>
+                                </li>}
                         </ul>
                         {userName ? (
-                            <div>
-                                <span className="text-white mx-2" style={{ paddingRight: "80vh", fontSize: "40px" }}><i>Welcome {userName}</i></span>
+                            <div className="d-flex align-items-center">
+                                <span className="text-white mx-2" style={{paddingRight:"70vh", fontSize:"40px"}}>Welcome {userName}</span>
+                                <div className="btn bg-white text-success mx-2" onClick={loadCart}>
+                                    <Badge color="secondary" badgeContent={items.length} >
+                                        <ShoppingCartIcon />
+                                    </Badge>
+                                    Cart
+                                </div>
                                 <button onClick={handleLogout} className="btn bg-white text-success">Logout</button>
                             </div>
                         ) : (
@@ -50,6 +69,7 @@ export default function Navbar() {
                                 <Link className="btn bg-white text-success mx-1" to="/signup">Signup</Link>
                             </form>
                         )}
+                        {cartView && <Modal onClose={() => setCartView(false)}><Cart /></Modal>}
                     </div>
                 </div>
             </nav>

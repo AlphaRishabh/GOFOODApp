@@ -1,80 +1,102 @@
-import React from 'react'
-import Delete from '@material-ui/icons/Delete'
+import React, { useState } from 'react';
+import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import { useCart, useDispatchCart } from '../components/ContextReducer';
+
 export default function Cart() {
-  let data = useCart();
-  let dispatch = useDispatchCart();
-  if (data.length === 0) {
-    return (
-      <div>
-        <div className='m-5 w-100 text-center fs-3'>The Cart is Empty!</div>
-      </div>
-    )
-  }
-  // const handleRemove = (index)=>{
-  //   console.log(index)
-  //   dispatch({type:"REMOVE",index:index})
-  // }
+  const data = useCart();
+  const dispatch = useDispatchCart();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleCheckOut = async () => {
-    let userEmail = localStorage.getItem("userEmail");
-    // console.log(data,localStorage.getItem("userEmail"),new Date())
-    let response = await fetch("http://localhost:5000/api/auth/orderData", {
-      // credentials: 'include',
-      // Origin:"http://localhost:3000/login",
+    const userEmail = localStorage.getItem('userEmail');
+    const response = await fetch('http://localhost:5000/api/auth/orderData', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         order_data: data,
         email: userEmail,
-        order_date: new Date().toDateString()
-      })
+        order_date: new Date().toDateString(),
+      }),
     });
-    console.log("JSON RESPONSE:::::", response.status)
-    if (response.status === 200) {
-      dispatch({ type: "DROP" })
-    }
-  }
 
-  let totalPrice = data.reduce((total, food) => total + food.price, 0)
+    if (response.status === 200) {
+      dispatch({ type: 'DROP' });
+      setShowSuccess(true); // Set showSuccess to true when checkout is successful
+
+      setTimeout(() => {
+        setShowSuccess(false); // Reset showSuccess after 2 seconds
+      }, 2000); // 2000 milliseconds = 2 seconds
+    }
+  };
+
+  const totalPrice = data.reduce((total, food) => total + food.price, 0);
+
   return (
     <div>
-
-      {console.log(data)}
-      <div className='container m-auto mt-5 table-responsive  table-responsive-sm table-responsive-md' >
+      <div className='container m-auto mt-5 table-responsive table-responsive-sm table-responsive-md'>
         <table className='table'>
-          <thead className=' text-primary fs-4'>
+          <thead className='text-primary fs-4'>
             <tr>
-              <th scope='col' >#</th>
-              <th scope='col' >Name</th>
-              <th scope='col' >Quantity</th>
-              <th scope='col' >Option</th>
-              <th scope='col' >Amount</th>
-              <th scope='col' ></th>
+              <th scope='col'>#</th>
+              <th scope='col'>Name</th>
+              <th scope='col'>Quantity</th>
+              <th scope='col'>Option</th>
+              <th scope='col'>Amount</th>
+              <th scope='col'></th>
             </tr>
           </thead>
           <tbody>
             {data.map((food, index) => (
-              <tr className="text-white">
-                <th scope='row' >{index + 1}</th>
-                <td >{food.name}</td>
+              <tr className='text-white' key={index}>
+                <th scope='row'>{index + 1}</th>
+                <td>{food.name}</td>
                 <td>{food.qty}</td>
                 <td>{food.size}</td>
                 <td>{food.price}</td>
-                <td ><button type="button" className="btn p-0 bg-white"><Delete onClick={() => { dispatch({ type: "REMOVE", index: index }) }} /></button> </td></tr>
+                <td>
+                  <button
+                    type='button'
+                    className='btn p-0 bg-white'
+                    onClick={() => {
+                      dispatch({ type: 'REMOVE', index: index });
+                    }}
+                  >
+                    <DeleteOutlineOutlinedIcon style={{ color: 'blue' }} />
+                  </button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
-        <div><h1 className='fs-2 text-white'>Total Price: {totalPrice}/-</h1></div>
         <div>
-          <button className='btn bg-primary mt-5 ' onClick={handleCheckOut} > Check Out </button>
+          <h1 className='fs-2 text-white'>Total Price: {totalPrice}/-</h1>
+        </div>
+        <div>
+          <button className='btn bg-primary mt-5' onClick={handleCheckOut}>
+            Check Out
+          </button>
         </div>
       </div>
-
-
-
+      {showSuccess && (
+        <div
+          style={{
+            backgroundColor: 'green',
+            color: 'white',
+            marginTop: '30px',
+            width: '40vh',
+            marginLeft: '70vh',
+            height: '20vh',
+            borderStyle: 'groove',
+            borderRadius: '10px',
+          }}
+        >
+          <CheckCircleOutlineIcon style={{ fontSize: '10rem', marginLeft: '12vh', marginTop: '5px' }} />
+          <h4 style={{ marginLeft: '140px' }}>Order Placed</h4>
+        </div>
+      )}
     </div>
-  )
+  );
 }
